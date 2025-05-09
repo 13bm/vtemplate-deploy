@@ -43,26 +43,32 @@ resource "vsphere_virtual_machine" "vm" {
     network_id = var.network_name
   }
 
-  # No disk block - attempt to use template's disks directly
+  disk {
+    label            = "disk0"
+    size             = data.vsphere_virtual_machine.template.disks.0.size
+    unit_number      = 0
+    thin_provisioned = false
+  }
 
   clone {
     template_uuid = data.vsphere_virtual_machine.template.id
+    linked_clone  = true
     
     customize {
       linux_options {
         host_name = "${var.vm_name_prefix}-${var.vm_name}"
-        domain    = var.domain_name
+        domain    = var.vm_name
       }
       
       network_interface {}
     }
   }
-  
+
   lifecycle {
     ignore_changes = [
       annotation,
+      disk,
       clone,
-      storage_policy_id,
     ]
   }
 }
@@ -143,12 +149,6 @@ variable "network_name" {
   description = "Port Group"
   type        = string
   default     = ""
-}
-
-variable "domain_name" {
-  description = "Domain name for the VM"
-  type        = string
-  default     = "local"
 }
 
 output "vm_ip_address" {
