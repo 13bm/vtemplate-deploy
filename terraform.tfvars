@@ -1,0 +1,14 @@
+vsphere_user       = ""
+vsphere_password   = ""
+vsphere_server     = ""
+datacenter_name    = ""
+datastore_name     = ""
+resource_pool_name = ""
+cluster_name       = ""
+network_name       = ""
+template_name      = ""
+vm_name            = ""
+vm_folder          = ""
+vm_name_prefix     = ""
+vm_cpu             = 4
+vm_memory          = 16384
